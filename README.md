@@ -14,3 +14,11 @@ Description here (https://Persagen.com/2019/06/10/arxiv-rss.html):
 * If you have desktop notification (e.g. Linux notify-send), then a persistent message will indicate the arrival of new content
 
 * ...
+
+**Notification**
+
+![notification](https://persagen.com/files/misc/arXiv-RSS-notify-send2.png)
+
+**Sample Results**
+
+![sample_output](https://persagen.com/files/misc/arxiv-rss-Krusader.png)
