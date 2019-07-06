@@ -19,6 +19,10 @@ Description here (https://Persagen.com/2019/06/10/arxiv-rss.html):
 
 ![notification](https://persagen.com/files/misc/arXiv-RSS-notify-send2.png)
 
-**Sample Results**
+**Sample results**
 
 ![sample_output](https://persagen.com/files/misc/arxiv-rss-Krusader.png)
+
+**Filtered results, in Neovim**
+
+![neovim_filtered-results](https://persagen.com/files/misc/arxiv-rss-in_Neovim.png)
