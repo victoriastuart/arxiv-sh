@@ -7,9 +7,9 @@ Description here (https://Persagen.com/2019/06/10/arxiv-rss.html):
 
 **TL//DR**
 
-* provide a BASH script, arxiv-rss.sh for daily retrieval of new, de-duplicated content from preselected arXiv groups.  That content is parsed into eyword-matched articles of interest, plus the remaining articles.
+* I provide a BASH script, arxiv-rss.sh for daily retrieval of new, de-duplicated content from preselected arXiv groups.  That content is parsed into eyword-matched articles of interest, plus the remaining articles.
 
-* e script can be scheduled to run daily via crontab, or manually executed.
+* The script can be scheduled to run daily via crontab, or manually executed.
 
 * If you have desktop notification (e.g. Linux notify-send), then a persistent message will indicate the arrival of new content
 
