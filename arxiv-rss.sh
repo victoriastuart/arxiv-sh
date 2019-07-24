@@ -5,7 +5,7 @@ export LANG=C.UTF-8
 
 #          file: /mnt/Vancouver/programming/scripts/arxiv-rss.sh
 #       version: 09                                                             ## added log file (v07); dates to int for datetime comparisons (v08)
-# last modified: 2019-07-05
+# last modified: 2019-07-24
 #     called by: /etc/crontab
 
 # ARCH LINUX -- DEPENDENCIES:
@@ -39,7 +39,7 @@ export LANG=C.UTF-8
 # https://stackoverflow.com/questions/793858/how-to-mkdir-only-if-a-dir-does-not-already-exist
 mkdir -p /mnt/Vancouver/tmp/arxiv
 mkdir -p /mnt/Vancouver/tmp/arxiv/old
-mkdir -p /mnt/Vancouver/tmp/arxiv/.trash
+mkdir -p /mnt/Vancouver/tmp/arxiv/trash
 
 cd /mnt/Vancouver/tmp/arxiv
 
@@ -193,59 +193,4 @@ if [[ "$(wc -c < .arxiv)" -lt 10 ]]; then
 else
   # https://arxiv.org/help/arxiv_identifier:
   # "The canonical form of identifiers from January 2015 (1501) is arXiv:YYMM.NNNNN, with 5-digits for the sequence number within the month."
-  grep -i arxiv: .arxiv | sed -r 's/\(arXiv\:([0-9]{4}\.[0-9]{5}).*$/https:\/\/arxiv.org\/pdf\/\1/' | sed 's/<title>//g' | sort | uniq > .arxiv-dedupped
-  #
-  egrep -i -e '\bbert\b|\belmo\b|\bernie\b|\banswer\b|\banswer[is].*|attention|biolog|biomed|cancer|carcino|chemotherap|classif|clinic|comprehension|contextual|coref|corpus|data mining|dna|embedding|entity|explanat|explain|extraction|\bgpt\b|\bgene\b|genetic|genom|\bgraph\b|\bgraph[is].*|inference|interactome|knowledge|language model|medic|multi-hop|multihop|natural language|\bner\b|\bnlp\b|omic|personali|protein|relation|representation|retriev|rna|semantic|syntactic|tensor|text|topolog|transfer learn|transformer|summar|understanding|xlnet' .arxiv-dedupped  >  arxiv-filtered
-  #
-  # Results files deduplication:
-  # https://stackoverflow.com/questions/37503186/comparing-two-files-by-lines-and-removing-duplicates-from-first-file
-  # Remove lines from .arxiv-dedupped that are in arxiv-filtered:
-  grep -vxFf  arxiv-filtered  .arxiv-dedupped  >  arxiv-others 
-  # Delete file, if empty:
-  if [[ "$(wc -c < arxiv-others)" -eq 0 ]]; then rm 2>/dev/null -f arxiv-others; fi
-fi
-
-# ----------------------------------------
-# Move duplicate results files to trash (failsafe check in case the dates are not processed correctly, above):
-
-cd /mnt/Vancouver/tmp/arxiv/
-
-# Get most recent date (embedded in file name) among previously-downloaded results in ./old/ directory:
-OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
-
-# Check for differences (diff command):
-a=$(/usr/bin/diff --color=always arxiv-filtered old/"$OLD_DATE2".arxiv-filtered | wc -c)
-b=$(/usr/bin/diff --color=always arxiv-others old/"$OLD_DATE2".arxiv-others | wc -c)
-
-# If no differences, then move these most recent (duplicate) results to trash:
-if [[ "$a" -eq 0 ]]; then mv 2>/dev/null -f arxiv-filtered  trash/"$CURR_DATE"-arxiv-filtered-deleted_dup_results | tee -a log; fi
-if [[ "$b" -eq 0 ]]; then mv 2>/dev/null -f arxiv-others  trash/"$CURR_DATE"-arxiv-others-deleted_dup_results | tee -a log; fi
-
-# ----------------------------------------
-# DESKTOP NOTIFICATION IF NEW ARTICLES:
-
-# https://stackoverflow.com/questions/40082346/how-to-check-if-a-file-exists-in-a-shell-script
-# if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then notify-send -i warning -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"; fi
-
-# https://unix.stackexchange.com/questions/47584/in-a-bash-script-using-the-conditional-or-in-an-if-statement
-# https://askubuntu.com/questions/598601/how-to-customize-the-font-style-in-notify-send
-
-# One-liner:
-# if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"; fi
-
-if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then
-  # notify-send -i warning -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"
-  # With an arXiv png logo (available at https://persagen.com/files/misc/arxiv.png)
-  notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"
-  # Clean up HTML, other code in titles (e.g.: &quot; to "):
-  #  's/&apos;/\'\''/g' addresses &apos; --> ' | "s/\\\'//g" addresses "\'" | "s/\`//g" addresses "\`" (can't use: 's/\`//g') | ...
-  sed -i 's/&quot;/"/g; s/&apos;/\'\''/g; s/&amp;/\&/g; s/\$//g; s/\\mathcal//g' arxiv-* | sed -i "s/\\\'//g; s/\`//g" arxiv-*
-fi
-
-# ----------------------------------------
-# Clean up:
-
-rm 2>/dev/null -f .arxiv*                                                       ## { .arxiv | .arxiv-dedupped | .arxiv-temp }
-echo
-
-# ============================================================================
+  grep -i arxiv: .arxiv | sed -r 's/\(arXiv\:([0-9]{4}\.[0-9]{5}).*$/https:\/\/arxiv.org\/pdf\/\1/' | sed 's/
