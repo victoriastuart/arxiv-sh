@@ -242,7 +242,11 @@ fi
 
 cd /mnt/Vancouver/tmp/arxiv/
 
-# On the FIRST-EVER RUN of this script, there will be no previous results -- so nothing to compare (diff command).
+# Get most recent date (embedded in file name) among previously-downloaded results in ./old/ directory:
+OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
+
+# Check for differences (diff command):
+#    * On the FIRST-EVER RUN of this script, there will be no previous results -- so nothing to compare (diff command).
 
 if [ -f arxiv-filtered ]; then
   # Only proceed if there is something to compare (present, past results files):
@@ -267,15 +271,6 @@ if [ -f arxiv-others ]; then
     if [[ "$a" -eq 0 ]]; then mv 2>/dev/null -f arxiv-others  trash/"$CURR_DATE"-arxiv-others-dup_results | tee -a log; fi
   fi
 fi
-
-# Get most recent date (embedded in file name) among previously-downloaded results in ./old/ directory:
-# OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
-# Check for differences (diff command):
-# a=$(/usr/bin/diff --color=always arxiv-filtered old/"$OLD_DATE2".arxiv-filtered | wc -c)
-# b=$(/usr/bin/diff --color=always arxiv-others old/"$OLD_DATE2".arxiv-others | wc -c)
-# If no differences, then move these most recent (duplicate) results to trash:
-# if [[ "$a" -eq 0 ]]; then mv 2>/dev/null -f arxiv-filtered  trash/"$CURR_DATE"-arxiv-filtered-deleted_dup_results | tee -a log; fi
-# if [[ "$b" -eq 0 ]]; then mv 2>/dev/null -f arxiv-others  trash/"$CURR_DATE"-arxiv-others-deleted_dup_results | tee -a log; fi
 
 # ----------------------------------------
 # DESKTOP NOTIFICATION IF NEW ARTICLES:
