@@ -4,14 +4,15 @@
 export LANG=C.UTF-8
 
 #          file: /mnt/Vancouver/programming/scripts/arxiv-rss.sh
-#       version: 09
-# last modified: 2019-07-27
+#       version: 10
+# last modified: 2019-08-06
 #     called by: /etc/crontab
 
 # Version history:
 #   * v07: add log file
 #   * v08: dates to INT for datetime comparisons
-#   * v09: egrep from list
+#   * v09: `egrep` from list
+#   * v10: `sed -i` from list [replace characters: accents, etc.)
 
 # Aside: I program in Neovim with textwidth=220: the formatting below reflects this wide-screen display.
 
@@ -27,8 +28,9 @@ export LANG=C.UTF-8
 #   /usr/bin/notify-send
 #   /usr/bin/vim
 
-# SCRIPT DEPENDENCY:
-#   /mnt/Vancouver/tmp/arxiv/arxiv_keywords.txt                                       ## [optional] file of key words, phrases to grep for "arxiv-filtered" results file
+# SCRIPT DEPENDENCIES:
+#   /mnt/Vancouver/tmp/arxiv/sed_characters                                     ## lookup file for character replacement via `sed -i` command on "arxiv-*" files
+#   /mnt/Vancouver/tmp/arxiv/arxiv_keywords.txt                                 ## lookup file of key words, phrases for `grep` command on "arxiv-filtered" results file
 
 # USAGE:
 #   Runs 3 am daily via crontab:
@@ -246,7 +248,7 @@ cd /mnt/Vancouver/tmp/arxiv/
 OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
 
 # Check for differences (diff command):
-#    * On the FIRST-EVER RUN of this script, there will be no previous results -- so nothing to compare (diff command).
+#   * On the FIRST-EVER RUN of this script, there will be no previous results -- so nothing to compare (diff command).
 
 if [ -f arxiv-filtered ]; then
   # Only proceed if there is something to compare (present, past results files):
@@ -273,7 +275,7 @@ if [ -f arxiv-others ]; then
 fi
 
 # ----------------------------------------
-# DESKTOP NOTIFICATION IF NEW ARTICLES:
+# DESKTOP NOTIFICATION OF NEW ARTICLES:
 
 # https://stackoverflow.com/questions/40082346/how-to-check-if-a-file-exists-in-a-shell-script
 # if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then notify-send -i warning -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"; fi
@@ -285,13 +287,10 @@ fi
 # if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"; fi
 
 if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then
-  # notify-send -i warning -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"
-  # With an arXiv png logo (available at https://persagen.com/files/misc/arxiv.png)
+  # Replace HTML, non-unicode characters in titles via external "sed_characters" lookup file:
+  sed -i arxiv-* -f sed_characters
+  # Desktop notification, with an arXiv png logo (available at https://persagen.com/files/misc/arxiv.png):
   notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"
-  # Clean up HTML, other code in titles (e.g.: &quot; to "):
-  #  's/&apos;/\'\''/g' addresses &apos; --> ' | "s/\\\'//g" addresses "\'" | "s/\`//g" addresses "\`" (can't use: 's/\`//g') | ...
-  sed -i 's/&quot;/"/g; s/&apos;/\'\''/g; s/&amp;/\&/g; s/\$//g; s/\\mathcal//g; s/\\alpha/α/g; s/\\delta/δ/g; s/\\ell/L/g; s/\\texttt//g' arxiv-*
-  sed -i "s/\\\'e/é/g; s/\`//g" arxiv-*
 fi
 
 # ----------------------------------------
