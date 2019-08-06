@@ -1,0 +1,114 @@
+#          file: /mnt/Vancouver/programming/scripts/sed_characters
+#       version: 02
+# last modified: 2019-08-06
+# =============================================================================
+
+# coding: utf-8
+
+# usage:
+#   sed -f sed_characters <input_file_to_be_processed>
+# in place:
+#   sed -i <file> -f sed_characters
+
+# IF NEEDED, USE '\b...\b' TO MATCH WHOLE WORDS!
+# https://stackoverflow.com/questions/1032023/sed-whole-word-search-and-replace
+#
+# sed: http://www.grymoire.com/Unix/Sed.html
+# http://unix.stackexchange.com/questions/95939/how-exactly-do-i-create-a-sed-script-and-use-it-to-edit-a-file
+
+# ----------------------------------------
+# COMMON MISSPELLINGS:
+
+s/ teh / the /g
+
+# ----------------------------------------
+# STRING ANNOYANCES
+
+s/View ORCID Profile//g
+
+# ----------------------------------------
+# CHARACTER ANNOYANCES: 'SMART' APOSTROPHES; LIGATURES ...
+
+s/´/'/g
+s/’/'/g
+s/‘/'/g
+s/′/'/g
+s/“/"/g
+s/ˮ/"/g
+s/‟/"/g
+s/“/"/g
+s/”/"/g
+s/ﬃ/ffi/g
+s/ﬁ/fi/g
+s/ﬀ/ff/g
+s/ﬂ/fl/g
+s/ﬄ/ffl/g
+s/␮/μ/g
+s/௡/®/g
+s/␧/ε/g
+s/␨/ζ/g
+s/␹/X/g
+s/␣/α/g
+s/␤/β/g
+s/␦/δ/g
+s/þ/+/g
+s/¼/=/g
+s/ϭ/=/g
+s/Ͻ/</g
+s/Ͼ/>/g
+s/␥/γ/g
+s/Ϫ/-/g
+s/—/ - /g
+s/ ‫؍‬ ./=/g
+s/Ն/≥/g
+s/Ն/≤/g
+s/ϳ/~/g
+s/Յ/+/g
+s/Ã/*/g
+s/Â/x/g
+s/Á/./g
+s/À/-/g
+s//=/g
+s/¥/x/g
+s///g
+s/™//g
+s/®//g
+s/–/-/g
+s/Ϯ/±/g
+s/؉/+/g
+s/ϫ/x/g
+s/ϩ/+/g
+s/—/-/g
+s/−/-/g
+s/؊/-/g
+s/…/.../g
+s/ϩ/+/g
+s//~/g
+s/ϫ/x/g
+s/€/a/g
+s/Mcintosh/McIntosh/g
+s/⇓//g
+# s/→/>/g
+
+s/&quot;/"/g
+s/&apos;/\'/g
+s/&amp;/\&/g
+s/\$//g
+s/\\mathcal//g
+s/\\alpha/α/g
+s/\\delta/δ/g
+s/\\ell/L/g
+s/\\texttt//g
+s/\\e/è/g
+s/\\E/È/g
+s/\\'a/á/g
+s/\\'A/Á/g
+s/\\^e/ê/g
+s/\\^E/Ê/g
+s/\\'i/í/g
+s/\\'I/Í/g
+s/\\'o/ó/g
+s/\\'O/Ó/g
+s/\\`//g
+
+
