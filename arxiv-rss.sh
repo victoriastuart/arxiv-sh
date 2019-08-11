@@ -253,8 +253,6 @@ OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]
 if [ -f arxiv-filtered ]; then
   # Only proceed if there is something to compare (present, past results files):
   if [ -f old/"$OLD_DATE2".arxiv-filtered ]; then
-    # Get most recent date (embedded in file name) among previously-downloaded results in ./old/ directory:
-    OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
     # Check for differences (diff command):
     a=$(/usr/bin/diff  arxiv-filtered  old/"$OLD_DATE2".arxiv-filtered | wc -c)
     # If no differences, then move these most recent (duplicate) results to trash:
@@ -266,8 +264,6 @@ if [ -f arxiv-others ]; then
   # Only proceed if there is something to compare (present, past results files):
   if [ -f old/"$OLD_DATE2".arxiv-others ]; then
     # Get most recent date (embedded in file name) among previously-downloaded results in ./old/ directory:
-    OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
-    # Check for differences (diff command):
     a=$(/usr/bin/diff  arxiv-others  old/"$OLD_DATE2".arxiv-others | wc -c)
     # If no differences, then move these most recent (duplicate) results to trash:
     if [[ "$a" -eq 0 ]]; then mv 2>/dev/null -f arxiv-others  trash/"$CURR_DATE"-arxiv-others-dup_results | tee -a log; fi
