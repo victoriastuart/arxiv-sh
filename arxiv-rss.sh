@@ -253,7 +253,7 @@ fi
 
 cd /mnt/Vancouver/apps/arxiv/
 
-# These two dates () already extracted above, but again included here (as needed) for testing:
+# These two dates { "$CURR_DATE" | "$OLD_DATE2" } are already extracted above, but again included here (as needed) for testing:
 
 echo $(date +'%Y-%m-%d') > .date                                                ## update OLD_DATE
 CURR_DATE=$(date +'%Y-%m-%d')                                                   ## CURRENT datetime (YYYY-MM-DD format)
