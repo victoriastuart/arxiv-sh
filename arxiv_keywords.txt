@@ -5,6 +5,7 @@ bayes
 \banswer\b
 \banswer[is].*
 attention
+.*bert\b
 biolog
 biomed
 cancer
@@ -17,7 +18,8 @@ contextual
 coref
 corpus
 data mining
-dna
+\bdna\b
+\bdrug\b
 embedding
 entity
 explanat
@@ -56,4 +58,5 @@ transfer learn
 transformer
 summar
 understanding
+\bword\b
 xlnet
