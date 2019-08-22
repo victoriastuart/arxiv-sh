@@ -5,7 +5,7 @@ export LANG=C.UTF-8
 
 #          file: /mnt/Vancouver/programming/scripts/arxiv-rss.sh
 #       version: 11
-# last modified: 2019-08-13
+# last modified: 2019-08-19
 #     called by: /etc/crontab
 
 # Version history:
@@ -30,14 +30,14 @@ export LANG=C.UTF-8
 #   /usr/bin/vim
 
 # SCRIPT DEPENDENCIES:
-#   /mnt/Vancouver/tmp/arxiv/sed_characters                                     ## lookup file for character replacement via `sed -i` command on "arxiv-*" files
-#   /mnt/Vancouver/tmp/arxiv/arxiv_keywords.txt                                 ## lookup file of key words, phrases for `grep` command on "arxiv-filtered" results file
+#   /mnt/Vancouver/apps/arxiv/sed_characters                                     ## lookup file for character replacement via `sed -i` command on "arxiv-*" files
+#   /mnt/Vancouver/apps/arxiv/arxiv_keywords.txt                                 ## lookup file of key words, phrases for `grep` command on "arxiv-filtered" results file
 
 # USAGE:
 #   Runs 3 am daily via crontab:
 #   m    h    dom  mon  dow  user        nice          command
 #   0    3    *    *    *    victoria    nice -n 19    /mnt/Vancouver/programming/scripts/arxiv-rss.sh                                         
-#   You can also manually execute (outside of: /mnt/Vancouver/tmp/arxiv/) this script.
+#   You can also manually execute (outside of: /mnt/Vancouver/apps/arxiv/) this script.
 
 # Open results files { .../arxiv-filtered | .../arxiv-others } in Vim/Neovim;
 # with cursor on URL, "gx" keypress (or: Ctrl-click) opens that link in browser. :-D
@@ -48,11 +48,11 @@ export LANG=C.UTF-8
 # Set paths:
 
 # https://stackoverflow.com/questions/793858/how-to-mkdir-only-if-a-dir-does-not-already-exist
-mkdir -p /mnt/Vancouver/tmp/arxiv
-mkdir -p /mnt/Vancouver/tmp/arxiv/old
-mkdir -p /mnt/Vancouver/tmp/arxiv/trash
+mkdir -p /mnt/Vancouver/apps/arxiv
+mkdir -p /mnt/Vancouver/apps/arxiv/old
+mkdir -p /mnt/Vancouver/apps/arxiv/trash
 
-cd /mnt/Vancouver/tmp/arxiv
+cd /mnt/Vancouver/apps/arxiv/
 
 cp 2>/dev/null -f .date.penultimate  .date.ante-penultimate                     ## 2>/dev/null : hide errors, warnings
 cp 2>/dev/null -f .date  .date.penultimate                                      ## Not interested in seeing these files, so .hidden
@@ -251,10 +251,19 @@ fi
 # ----------------------------------------
 # Move duplicate results files to trash (failsafe check in case the dates are not processed correctly, above):
 
-cd /mnt/Vancouver/tmp/arxiv/
+cd /mnt/Vancouver/apps/arxiv/
+
+# These two dates () already extracted above, but again included here (as needed) for testing:
+
+echo $(date +'%Y-%m-%d') > .date                                                ## update OLD_DATE
+CURR_DATE=$(date +'%Y-%m-%d')                                                   ## CURRENT datetime (YYYY-MM-DD format)
+printf '\tCurrent date: %s\n' "$CURR_DATE"
 
 # Get most recent date (embedded in file name) among previously-downloaded results in ./old/ directory:
-OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
+OLD_DATE2=$(ls -lt old/ > /apps/arxiv-old_dates; rg /apps/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
+printf '\t      Old date: %s\n' "$OLD_DATE2"
+
+# ----------------------------------------
 
 # Check for differences (diff command):
 #   * On the FIRST-EVER RUN of this script, there will be no previous results -- so nothing to compare (diff command).
@@ -283,19 +292,19 @@ fi
 # DESKTOP NOTIFICATION OF NEW ARTICLES:
 
 # https://stackoverflow.com/questions/40082346/how-to-check-if-a-file-exists-in-a-shell-script
-# if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then notify-send -i warning -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"; fi
+# if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then notify-send -i warning -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/apps/arxiv/\">/mnt/Vancouver/apps/arxiv/</a></span>"; fi
 
 # https://unix.stackexchange.com/questions/47584/in-a-bash-script-using-the-conditional-or-in-an-if-statement
 # https://askubuntu.com/questions/598601/how-to-customize-the-font-style-in-notify-send
 
 # One-liner:
-# if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"; fi
+# if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/apps/arxiv/\">/mnt/Vancouver/apps/arxiv/</a></span>"; fi
 
 if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then
   # Replace HTML, non-unicode characters in titles via external "sed_characters" lookup file:
   sed -i arxiv-* -f sed_characters
   # Desktop notification, with an arXiv png logo (available at https://persagen.com/files/misc/arxiv.png):
-  notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/tmp/arxiv/\">/mnt/Vancouver/tmp/arxiv/</a></span>"
+  notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/apps/arxiv/\">/mnt/Vancouver/apps/arxiv/</a></span>"
 fi
 
 # ----------------------------------------
