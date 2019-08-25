@@ -5,7 +5,7 @@ export LANG=C.UTF-8
 
 #          file: /mnt/Vancouver/programming/scripts/arxiv-rss.sh
 #       version: 11
-# last modified: 2019-08-19
+# last modified: 2019-08-25
 #     called by: /etc/crontab
 
 # Version history:
@@ -260,7 +260,7 @@ CURR_DATE=$(date +'%Y-%m-%d')                                                   
 printf '\tCurrent date: %s\n' "$CURR_DATE"
 
 # Get most recent date (embedded in file name) among previously-downloaded results in ./old/ directory:
-OLD_DATE2=$(ls -lt old/ > /apps/arxiv-old_dates; rg /apps/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
+OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
 printf '\t      Old date: %s\n' "$OLD_DATE2"
 
 # ----------------------------------------
@@ -312,5 +312,4 @@ fi
 
 rm 2>/dev/null -f .arxiv*                                                       ## { .arxiv | .arxiv-dedupped | .arxiv-temp }
 echo
-
 # ============================================================================
