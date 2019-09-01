@@ -7,6 +7,7 @@ export LANG=C.UTF-8
 #       version: 11
 # last modified: 2019-09-01
 #     called by: /etc/crontab
+#                0 7 * * * victoria nice -n 19 /mnt/Vancouver/programming/scripts/arxiv-rss.sh
 
 # Version history:
 #   * v07: add log file
