@@ -5,7 +5,7 @@ export LANG=C.UTF-8
 
 #          file: /mnt/Vancouver/programming/scripts/arxiv-rss.sh
 #       version: 11
-# last modified: 2019-08-25
+# last modified: 2019-09-01
 #     called by: /etc/crontab
 
 # Version history:
@@ -249,6 +249,11 @@ else
 fi
 
 # ----------------------------------------
+# Need to pause, briefly, to allow file processing on disk (above) to catch up to script execution (here):
+
+sleep 1
+
+# ----------------------------------------
 # Move duplicate results files to trash (failsafe check in case the dates are not processed correctly, above):
 
 cd /mnt/Vancouver/apps/arxiv/
@@ -264,6 +269,9 @@ OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]
 printf '\t      Old date: %s\n' "$OLD_DATE2"
 
 # ----------------------------------------
+
+# Comparison operators: http://tldp.org/LDP/abs/html/comparison-ops.html
+#   -eq : equal to | -ne : not equal to | -gt : greater than | -lt : less than | -ge : greater than or equal to | -le : less than or equal to | ...
 
 # Check for differences (diff command):
 #   * On the FIRST-EVER RUN of this script, there will be no previous results -- so nothing to compare (diff command).
@@ -288,6 +296,7 @@ if [ -f arxiv-others ]; then
   fi
 fi
 
+exit
 # ----------------------------------------
 # DESKTOP NOTIFICATION OF NEW ARTICLES:
 
