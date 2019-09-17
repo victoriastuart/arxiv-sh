@@ -4,10 +4,9 @@
 export LANG=C.UTF-8
 
 #          file: /mnt/Vancouver/programming/scripts/arxiv-rss.sh
-#       version: 11
-# last modified: 2019-09-01
-#     called by: /etc/crontab
-#                0 7 * * * victoria nice -n 19 /mnt/Vancouver/programming/scripts/arxiv-rss.sh
+#       version: 12
+# last modified: 2019-09-16
+#     called by: /etc/crontab (7 am daily)                                      ## 0 7 * * * victoria nice -n 19 /mnt/Vancouver/programming/scripts/arxiv-rss.sh
 
 # Version history:
 #   * v07: add log file
@@ -15,6 +14,7 @@ export LANG=C.UTF-8
 #   * v09: `egrep` from list
 #   * v10: `sed -i` from list [replace characters: accents, etc.)
 #   * v11: changed grep expression (line ~230) to return URL for abstract (rather than PDF)
+#   * v12: switched identifying duplicate results files from diff method to date-tagged file approach
 
 # Aside: I program in Neovim with textwidth=220: the formatting below reflects this wide-screen display.
 
@@ -51,7 +51,6 @@ export LANG=C.UTF-8
 # https://stackoverflow.com/questions/793858/how-to-mkdir-only-if-a-dir-does-not-already-exist
 mkdir -p /mnt/Vancouver/apps/arxiv
 mkdir -p /mnt/Vancouver/apps/arxiv/old
-mkdir -p /mnt/Vancouver/apps/arxiv/trash
 
 cd /mnt/Vancouver/apps/arxiv/
 
@@ -74,6 +73,10 @@ if [ -f .date ]; then : else; echo $(date --date='yesterday' +'%Y-%m-%d') > .dat
 # https://stackoverflow.com/questions/10990949/convert-date-time-string-to-epoch-in-bash
 # datetime integer conversions, per my post at: https://unix.stackexchange.com/a/526087/135372
 
+# Save last result (manually delete, as needed):
+mv 2>/dev/null -f arxiv-filtered  old/"$OLD_DATE".arxiv-filtered
+mv 2>/dev/null -f arxiv-others  old/"$OLD_DATE".arxiv-others
+
 # Testing:
 # OLD_DATE='2019-07-15'                                                         ## for testing: ensures retrieval of latest arXiv RSS data snapshot
 
@@ -87,10 +90,6 @@ OLD_DATE_INT=$(date -d "${OLD_DATE}" +"%s")
 # Get current date:
 echo $(date +'%Y-%m-%d') > .date                                                ## update OLD_DATE
 CURR_DATE=$(date +'%Y-%m-%d')                                                   ## CURRENT datetime (YYYY-MM-DD format)
-
-# Save last result (manually delete, as needed):
-mv 2>/dev/null -f arxiv-filtered  old/"$OLD_DATE".arxiv-filtered
-mv 2>/dev/null -f arxiv-others  old/"$OLD_DATE".arxiv-others
 
 printf '\n    old datetime: %s' "$OLD_DATE"
 printf '\ncurrent datetime: %s\n' "$CURR_DATE"
@@ -150,6 +149,7 @@ if [[ "$cs_AI_TIMESTAMP_INT" -eq "$OLD_DATE_INT" ]]; then
   echo 'No new cs.AI (Artificial Intelligence) RSS feeds.' 2>&1 | tee -a log
 else
   echo 'Retrieving new cs.AI (Artificial Intelligence) RSS feeds ...' 2>&1 | tee -a log
+  # >> : append to file
   cat .arxiv-temp >> .arxiv
 fi
 
@@ -219,7 +219,8 @@ fi
 # ----------------------------------------
 # Deduplication / egrep interesting titles:
 
-# One-liner: if [[ "$(wc -c < .arxiv)" -lt 10 ]]; then : else; ,,,; fi
+# One-liner: if [[ "$(wc -c < .arxiv)" -lt 10 ]]; then : else ,,,; fi
+# E.g.: if [[ "$(wc -c < test)" -eq 0 ]]; then echo '******'; else sed -i "1i$(date +'%Y-%m-%d')" test; fi
 if [[ "$(wc -c < .arxiv)" -lt 10 ]]; then
   :
 else
@@ -245,59 +246,67 @@ else
   # Remove lines from .arxiv-dedupped that are in arxiv-filtered:
   grep -vxFf  arxiv-filtered  .arxiv-dedupped  >  arxiv-others 
 
-  # Delete file, if empty:
-  if [[ "$(wc -c < arxiv-others)" -eq 0 ]]; then rm 2>/dev/null -f arxiv-others; fi
+  # Delete file, if empty, else tag top of file with date (yyyy-mm-dd):
+  # if [[ "$(wc -c < test)" -eq 0 ]]; then echo '******'; else sed -i "1i$(date +'%Y-%m-%d')" test; fi
+  if [[ "$(wc -c < arxiv-filtered)" -eq 0 ]]; then rm 2>/dev/null -f arxiv-filtered; else sed -i "1i$(date +'%Y-%m-%d')" arxiv-filtered; fi
+  if [[ "$(wc -c < arxiv-others)" -eq 0 ]]; then rm 2>/dev/null -f arxiv-others; else sed -i "1i$(date +'%Y-%m-%d')" arxiv-others; fi
 fi
 
 # ----------------------------------------
 # Need to pause, briefly, to allow file processing on disk (above) to catch up to script execution (here):
 
-sleep 1
+sleep 1.5
 
 # ----------------------------------------
-# Move duplicate results files to trash (failsafe check in case the dates are not processed correctly, above):
+# Check for duplicate results:
 
 cd /mnt/Vancouver/apps/arxiv/
 
-# These two dates { "$CURR_DATE" | "$OLD_DATE2" } are already extracted above, but again included here (as needed) for testing:
-
-echo $(date +'%Y-%m-%d') > .date                                                ## update OLD_DATE
-CURR_DATE=$(date +'%Y-%m-%d')                                                   ## CURRENT datetime (YYYY-MM-DD format)
-printf '\tCurrent date: %s\n' "$CURR_DATE"
-
 # Get most recent date (embedded in file name) among previously-downloaded results in ./old/ directory:
+# ls -t : sort by modification time, newest first
 OLD_DATE2=$(ls -lt old/ > /tmp/arxiv-old_dates; rg /tmp/arxiv-old_dates -e [0-9]\{4\}- | head -n 1 | sed -r 's/.*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
-printf '\t      Old date: %s\n' "$OLD_DATE2"
+# printf '\t      Old date: %s\n' "$OLD_DATE2"                                  ## Old date: 2019-09-13
+# echo "$OLD_DATE2"                                                             ## 2019-09-13
 
-# ----------------------------------------
+# Convert old date to INT:                                                      ## needed for file date comparisons
+OLD_DATE2_INT=$(date -d "${OLD_DATE2}" +"%s")
+# echo "$OLD_DATE2_INT"                                                         ## 1568358000
+
+CURR_DATE=$(date +'%Y-%m-%d')
+# echo "$CURR_DATE"                                                             ## 2019-09-15
+CURR_DATE_INT=$(date -d "${CURR_DATE}" +"%s")
+# echo "$CURR_DATE_INT"                                                         ## 1568530800
+
+# Test:
+# if [[ "$CURR_DATE_INT" -ge "$OLD_DATE_INT" ]]; then echo '**********'; fi
+# if [[ "$OLD_DATE2_INT" -le "$CURR_DATE_INT" ]]; then echo '**********'; else echo '##########'; fi
 
 # Comparison operators: http://tldp.org/LDP/abs/html/comparison-ops.html
 #   -eq : equal to | -ne : not equal to | -gt : greater than | -lt : less than | -ge : greater than or equal to | -le : less than or equal to | ...
 
-# Check for differences (diff command):
-#   * On the FIRST-EVER RUN of this script, there will be no previous results -- so nothing to compare (diff command).
-
+# Only proceed if there is something to compare (present, past results files):
 if [ -f arxiv-filtered ]; then
-  # Only proceed if there is something to compare (present, past results files):
   if [ -f old/"$OLD_DATE2".arxiv-filtered ]; then
-    # Check for differences (diff command):
-    a=$(/usr/bin/diff  arxiv-filtered  old/"$OLD_DATE2".arxiv-filtered | wc -c)
-    # If no differences, then move these most recent (duplicate) results to trash:
-    if [[ "$a" -eq 0 ]]; then mv 2>/dev/null -f arxiv-filtered  trash/"$CURR_DATE"-arxiv-filtered-dup_results | tee -a log; fi
+    # Compare files based on dates:
+    if [[ "$CURR_DATE_INT" -gt "$OLD_DATE2_INT"  ]]; then
+      :                                                                         ## pass
+    else
+      rm 2>/dev/null -f arxiv-filtered
+    fi
   fi
 fi
 
 if [ -f arxiv-others ]; then
-  # Only proceed if there is something to compare (present, past results files):
   if [ -f old/"$OLD_DATE2".arxiv-others ]; then
-    # Check for differences (diff command):
-    a=$(/usr/bin/diff  arxiv-others  old/"$OLD_DATE2".arxiv-others | wc -c)
-    # If no differences, then move these most recent (duplicate) results to trash:
-    if [[ "$a" -eq 0 ]]; then mv 2>/dev/null -f arxiv-others  trash/"$CURR_DATE"-arxiv-others-dup_results | tee -a log; fi
+    # Compare files based on dates:
+    if [[ "$CURR_DATE_INT" -gt "$OLD_DATE2_INT"  ]]; then
+      :                                                                         ## pass
+    else
+      rm 2>/dev/null -f arxiv-others
+    fi
   fi
 fi
 
-exit
 # ----------------------------------------
 # DESKTOP NOTIFICATION OF NEW ARTICLES:
 
