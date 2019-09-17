@@ -1,6 +1,6 @@
 #          file: /mnt/Vancouver/programming/scripts/sed_characters
 #       version: 02
-# last modified: 2019-08-06
+# last modified: 2019-09-16
 # =============================================================================
 
 # coding: utf-8
@@ -25,6 +25,7 @@ s/ teh / the /g
 # STRING ANNOYANCES
 
 s/View ORCID Profile//g
+s/ | Download Citation//g
 
 # ----------------------------------------
 # CHARACTER ANNOYANCES: 'SMART' APOSTROPHES; LIGATURES ...
@@ -91,24 +92,43 @@ s/⇓//g
 # s/→/>/g
 
 s/&quot;/"/g
-s/&apos;/\'/g
+s/&apos;/'/g
 s/&amp;/\&/g
-s/\$//g
 s/\\mathcal//g
 s/\\alpha/α/g
 s/\\delta/δ/g
 s/\\ell/L/g
+s/\\lambda/λ/g
+s/\\rho/ρ/g
+s/\\sigma/σ/g
 s/\\texttt//g
 s/\\e/è/g
 s/\\E/È/g
 s/\\'a/á/g
+## Terminal: echo "apple-\'A-banana" | sed "s/\\\'A/Á/g"
+## This script (one less \ back slash):
 s/\\'A/Á/g
+## Terminal: echo "apple-\'e-banana" | sed "s/\\\'e/é/g"
+## This script (one less \ back slash):
+s/\\'e/é/g
 s/\\^e/ê/g
 s/\\^E/Ê/g
+## Terminal: echo 'apple-\dot{G}-banana' | sed 's/\\\dot{G}/Ġ/g'                ## e.g.: https://arxiv.org/abs/1908.10725
+## This script (one less \ back slash):
+s/\\dot{g}/ġ/g
+s/\\dot{G}/Ġ/g
 s/\\'i/í/g
 s/\\'I/Í/g
 s/\\'o/ó/g
 s/\\'O/Ó/g
+s/\\"o/ö/g
 s/\\`//g
+s/\\dot//g
+s/_{{X}}/ᵪ/g
 
-
+s/\$//g                                                                         ## Removing $ breaks LaTeX code (so don't use this list, for other purposes)! :-o
+s/{//g
+s/}//g
+# s/\{//g
+# s/}//g
+s/\\textit//g
