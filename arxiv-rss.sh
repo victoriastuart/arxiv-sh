@@ -5,7 +5,7 @@ export LANG=C.UTF-8
 
 #          file: /mnt/Vancouver/programming/scripts/arxiv-rss.sh
 #       version: 12
-# last modified: 2019-09-16
+# last modified: 2019-09-18
 #     called by: /etc/crontab (7 am daily)                                      ## 0 7 * * * victoria nice -n 19 /mnt/Vancouver/programming/scripts/arxiv-rss.sh
 
 # Version history:
@@ -73,15 +73,15 @@ if [ -f .date ]; then : else; echo $(date --date='yesterday' +'%Y-%m-%d') > .dat
 # https://stackoverflow.com/questions/10990949/convert-date-time-string-to-epoch-in-bash
 # datetime integer conversions, per my post at: https://unix.stackexchange.com/a/526087/135372
 
-# Save last result (manually delete, as needed):
-mv 2>/dev/null -f arxiv-filtered  old/"$OLD_DATE".arxiv-filtered
-mv 2>/dev/null -f arxiv-others  old/"$OLD_DATE".arxiv-others
-
 # Testing:
 # OLD_DATE='2019-07-15'                                                         ## for testing: ensures retrieval of latest arXiv RSS data snapshot
 
 # Get old date:
 OLD_DATE=$(cat .date)                                                           ## .hidden
+
+# Save last result (manually delete, as needed):
+mv 2>/dev/null -f arxiv-filtered  old/"$OLD_DATE".arxiv-filtered
+mv 2>/dev/null -f arxiv-others  old/"$OLD_DATE".arxiv-others
 
 # Convert old date to INT:                                                      ## I convert the arXiv feed (current) dates to INT in the IF statements, further below
 OLD_DATE_INT=$(date -d "${OLD_DATE}" +"%s")
