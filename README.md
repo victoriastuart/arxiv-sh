@@ -1,6 +1,6 @@
-* **Note:** At times I've updates this script - mainly to address date-related bugs interfering withthe daily checks / downloads.  Compare your version to the current version (always provided in the header of the script).*
+* **Note:** At various times I've updated the `arxiv-rss.sh` script, mainly to address date-related bugs interfering withthe daily checks / downloads.*
 
-* Current version: v12
+* Current version (always provided in the header of the script): v13
 
 ---
 
