@@ -1,3 +1,9 @@
+* **Note:** At times I've updates this script - mainly to address date-related bugs interfering withthe daily checks / downloads.  Compare your version to the current version (always provided in the header of the script).*
+
+* Current version: v12
+
+---
+
 # arxiv-rss
 Daily query for new arXiv articles in select topics via RSS
 
