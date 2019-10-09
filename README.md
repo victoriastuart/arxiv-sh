@@ -1,4 +1,4 @@
-***Note:** At various times I've updated the <a href="https://github.com/victoriastuart/arxiv-rss/blob/master/arxiv-rss.sh">arxiv-rss.sh</a> script, mainly to address date-related bugs interfering with the daily checks / downloads.*
+***Note:** At various times I've updated the [https://github.com/victoriastuart/arxiv-rss/blob/master/arxiv-rss.sh](arxiv-rss.sh) script, mainly to address date-related bugs interfering with the daily checks / downloads.*
 
 Current version (shown in <a href="https://github.com/victoriastuart/arxiv-rss/blob/master/arxiv-rss.sh">arxiv-rss.sh</a> header): **13**
 
