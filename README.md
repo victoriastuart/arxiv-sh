@@ -1,4 +1,4 @@
-***Note:** At various times I've updated the `arxiv-rss.sh` script, mainly to address date-related bugs interfering withthe daily checks / downloads.*
+***Note:** At various times I've updated the `arxiv-rss.sh` script, mainly to address date-related bugs interfering with the daily checks / downloads.*
 
 * Current version (see also script header): **13**
 
