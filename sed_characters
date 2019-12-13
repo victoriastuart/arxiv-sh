@@ -1,6 +1,7 @@
+# =============================================================================
 #          file: /mnt/Vancouver/programming/scripts/sed_characters
 #       version: 02
-# last modified: 2019-10-30
+# last modified: 2019-12-12
 # =============================================================================
 
 # coding: utf-8
@@ -96,15 +97,20 @@ s/&apos;/'/g
 s/&amp;/\&/g
 s/\\mathcal//g
 s/\\alpha/α/g
+s/\\beta/β/g
 s/\\delta/δ/g
 s/\\ell/L/g
 s/\\lambda/λ/g
+s/\^i/î/g
+s/\\=o/ō/g
 s/\\rho/ρ/g
 s/\\sigma/σ/g
+s/\\Sigma/Σ/g
 s/\\texttt//g
 s/\\e/è/g
 s/\\E/È/g
 s/\\'a/á/g
+s/\\infty/∞/g
 # ----------------------------------------------------------------------------
 # Terminal: need to triple \\\ escape sed expressions applied over \-escaped text in arxiv output, e.g.:
 #   echo "Using P\'olya-Gamma Augmentation | \nabla" | sed "s/\\\'o/ó/g; s/\\\nabla/∇/g"
