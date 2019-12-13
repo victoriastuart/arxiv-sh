@@ -13,6 +13,7 @@ carcino
 chemotherap
 classif
 clinic
+commonsense reasoning
 comprehension
 contextual
 coref
@@ -31,6 +32,7 @@ genetic
 genom
 \bgraph\b
 \bgraph[is].*
+hypergraph*
 inference
 interactome
 knowledge
@@ -42,13 +44,16 @@ natural language
 \bner\b
 \bnlp\b
 omic
+ontolog
 personali
 protein
 relation
 representation
 retriev
 rna
+schema
 semantic
+semeval
 spanbert
 syntactic
 tensor
