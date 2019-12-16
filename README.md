@@ -15,6 +15,8 @@ Description: https://Persagen.com/2019/06/10/arxiv-rss.html
 
 * I provide a BASH script, [`arxiv-rss.sh`](https://persagen.com/files/misc/arxiv-rss.sh) [&larr; direct download link] for daily retrieval of new, de-duplicated content from preselected arXiv groups.  That content is parsed into two files: keyword-matched articles of interest, plus the remaining articles.
 
+  * As a crude measure of utility, I typically click (Vim: `gx` keypress) perhaps 2% of links in a "arxiv-others" results file and perhaps 10-30+% of links in a "arxiv-filtered) file, representing an ~5-15 fold enrichment in articles of interest.
+
 * The script can be scheduled to run daily via crontab, or manually executed.
 
 * If you have desktop notification (e.g. Linux `notify-send`), then a persistent message will indicate the arrival of new content
