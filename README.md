@@ -1,19 +1,17 @@
 ***Note:** At various times I've updated the [`arxiv-rss.sh`](https://github.com/victoriastuart/arxiv-rss/blob/master/arxiv-rss.sh) script, mainly to address date-related bugs interfering with the daily checks / downloads.*
 
-Current version (shown in [`arxiv-rss.sh`](https://github.com/victoriastuart/arxiv-rss/blob/master/arxiv-rss.sh) header): **13**
+Current version (shown in [`arxiv-rss.sh`](https://github.com/victoriastuart/arxiv-rss/blob/master/arxiv-rss.sh) header): 13
 
 ---
 
 # arxiv-rss
 Daily query for new arXiv articles in select topics via RSS
 
-Description: https://Persagen.com/2019/06/10/arxiv-rss.html
-
-  * [Daily, De-Duplicated arXiv RSS Updates: Keyword Parsed, Plus Non-Parsed Content](https://persagen.com/2019/06/10/arxiv-rss.html)
+Full description: [Daily, De-Duplicated arXiv RSS Updates: Keyword Parsed, Plus Non-Parsed Content](https://persagen.com/2019/06/10/arxiv-rss.html)
 
 **TL//DR**
 
-* I provide a BASH script, [`arxiv-rss.sh`](https://persagen.com/files/misc/arxiv-rss.sh) [&larr; direct download link] for daily retrieval of new, de-duplicated content from preselected arXiv groups.  That content is parsed into two files: keyword-matched articles of interest, plus the remaining articles.
+* A BASH script, [`arxiv-rss.sh`](https://persagen.com/files/misc/arxiv-rss.sh) [&larr; direct download link], for daily retrieval of new, de-duplicated content from preselected arXiv groups.  That content is parsed into two files: keyword-matched articles of interest, plus the remaining articles.
 
   * As a crude measure of utility, I typically click (Vim: `gx` keypress) perhaps 2% of links in a "arxiv-others" results file and perhaps 20% of links in a "arxiv-filtered") file, a ≥10-fold enrichment in articles of interest.
 
