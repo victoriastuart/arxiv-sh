@@ -2,8 +2,6 @@
 
 Current version (shown in [`arxiv-rss.sh`](https://github.com/victoriastuart/arxiv-rss/blob/master/arxiv-rss.sh) header): 13
 
----
-
 # arxiv-rss
 Daily query for new arXiv articles in select topics via RSS
 
