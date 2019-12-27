@@ -1,6 +1,6 @@
 **arxiv-rss:** daily query for new arXiv articles in select topics via RSS
 
-Full description: [Daily, De-Duplicated arXiv RSS Updates: Keyword Parsed, Plus Non-Parsed Content](https://persagen.com/2019/06/10/arxiv-rss.html)
+[Daily, De-Duplicated arXiv RSS Updates: Keyword Parsed, Plus Non-Parsed Content](https://persagen.com/2019/06/10/arxiv-rss.html)
 
 **TL//DR**
 
