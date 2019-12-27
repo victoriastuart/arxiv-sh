@@ -2,7 +2,7 @@
 
 [Daily, De-Duplicated arXiv RSS Updates: Keyword Parsed, Plus Non-Parsed Content](https://persagen.com/2019/06/10/arxiv-rss.html)
 
-**TL//DR**
+**tldr**
 
 * A BASH script, [`arxiv-rss.sh`](https://persagen.com/files/misc/arxiv-rss.sh) [&larr; direct download link], for daily retrieval of new, de-duplicated content from preselected arXiv groups.  That content is parsed into two files: keyword-matched articles of interest, plus the remaining articles.
 
