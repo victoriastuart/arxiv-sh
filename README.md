@@ -1,9 +1,5 @@
-***Note:** At various times I've updated the [`arxiv-rss.sh`](https://github.com/victoriastuart/arxiv-rss/blob/master/arxiv-rss.sh) script, mainly to address date-related bugs interfering with the daily checks / downloads.*
-
-Current version (shown in [`arxiv-rss.sh`](https://github.com/victoriastuart/arxiv-rss/blob/master/arxiv-rss.sh) header): 13
-
-# arxiv-rss
-Daily query for new arXiv articles in select topics via RSS
+**arxiv-rss:** daily query for new arXiv articles in select topics via RSS
+v.13 (indicated near top of script): 13
 
 Full description: [Daily, De-Duplicated arXiv RSS Updates: Keyword Parsed, Plus Non-Parsed Content](https://persagen.com/2019/06/10/arxiv-rss.html)
 
