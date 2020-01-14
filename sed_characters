@@ -1,7 +1,7 @@
 # =============================================================================
 #          file: /mnt/Vancouver/programming/scripts/sed_characters
 #       version: 02
-# last modified: 2019-12-12
+# last modified: 2020-01-14
 # =============================================================================
 
 # coding: utf-8
@@ -46,6 +46,7 @@ s/ﬀ/ff/g
 s/ﬂ/fl/g
 s/ﬄ/ffl/g
 s/␮/μ/g
+s/\\mu/μ/g
 s/௡/®/g
 s/␧/ε/g
 s/␨/ζ/g
@@ -91,6 +92,8 @@ s/€/a/g
 s/Mcintosh/McIntosh/g
 s/⇓//g
 # s/→/>/g
+# s/\~a/ã/g
+s/\\~o/õ/g
 
 s/&quot;/"/g
 s/&apos;/'/g
@@ -101,7 +104,8 @@ s/\\beta/β/g
 s/\\delta/δ/g
 s/\\ell/L/g
 s/\\lambda/λ/g
-s/\^i/î/g
+s/\\^i/î/g
+s/\\"i/ï/g
 s/\\=o/ō/g
 s/\\rho/ρ/g
 s/\\sigma/σ/g
@@ -123,6 +127,7 @@ s/\\'o/ó/g
 # Terminal: echo "apple-\'A-banana" | sed "s/\\\'A/Á/g"
 # This script (one less \ back slash):
 s/\\'A/Á/g
+s/\\AE /Æ/g
 # ----------------------------------------
 # Terminal: echo "apple-\'e-banana" | sed "s/\\\'e/é/g"
 # This script (one less \ back slash):
@@ -130,7 +135,7 @@ s/\\'e/é/g
 s/\\^e/ê/g
 s/\\^E/Ê/g
 # ----------------------------------------
-# Terminal: echo 'apple-\dot{G}-banana' | sed 's/\\\dot{G}/Ġ/g'                ## e.g.: https://arxiv.org/abs/1908.10725
+# Terminal: echo 'apple-\dot{G}-banana' | sed 's/\\\dot{G}/Ġ/g'                 ## e.g.: https://arxiv.org/abs/1908.10725
 # This script (one less \ back slash):
 s/\\dot{g}/ġ/g
 s/\\dot{G}/Ġ/g
@@ -141,7 +146,19 @@ s/\\'o/ó/g
 s/\\'O/Ó/g
 s/\\"o/ö/g
 s/\\H/ő/g
+s/\\'u/ú/g
 s/\\'U/Ú/g
+#
+s/\\cc/ç/g
+# echo 'fran\ccais' >> fran\ccais
+# echo 'fran\ccais' | sed 's/\\cc/ç/g' >> français
+# $ date
+#   Tue 14 Jan 2020 08:52:32 AM PST
+# test:
+# $ sed -f sed_characters arxiv-filtered | grep fran
+#   Représentations lexicales pour la détection non supervisée d'événements dans un flux de tweets : étude sur des corpus français et anglais. https://arxiv.org/abs/2001.04139
+#
+s/\\~a/ã/g
 s/\\`//g
 s/\\dot//g
 s/\\vert/|/g
@@ -153,3 +170,4 @@ s/}//g
 # s/\{//g
 # s/}//g
 s/\\textit//g
+
