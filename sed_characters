@@ -150,12 +150,17 @@ s/\\'u/ú/g
 s/\\'U/Ú/g
 #
 s/\\cc/ç/g
-# echo 'fran\ccais' >> fran\ccais
-# echo 'fran\ccais' | sed 's/\\cc/ç/g' >> français
+# echo 'fran\ccais'
+#   fran\ccais
+# echo 'fran\ccais' | sed 's/\\cc/ç/g'
+#   français
 # $ date
 #   Tue 14 Jan 2020 08:52:32 AM PST
-# test:
+# Tests:
 # $ sed -f sed_characters arxiv-filtered | grep fran
+#   Représentations lexicales pour la détection non supervisée d'événements dans un flux de tweets : étude sur des corpus français et anglais. https://arxiv.org/abs/2001.04139
+# $ sed -f sed_characters arxiv-filtered > zzz
+# $ cat zzz | grep fran
 #   Représentations lexicales pour la détection non supervisée d'événements dans un flux de tweets : étude sur des corpus français et anglais. https://arxiv.org/abs/2001.04139
 #
 s/\\~a/ã/g
