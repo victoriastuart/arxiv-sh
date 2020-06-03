@@ -4,8 +4,8 @@
 export LANG=C.UTF-8
 
 #          file: /mnt/Vancouver/programming/scripts/arxiv-rss.sh
-#       version: 13
-# last modified: 2019-09-30
+#       version: 14
+# last modified: 2020-06-02 08:20:37 -0700 (PST)
 #     called by: /etc/crontab (7 am daily)                                      ## 0 7 * * * victoria nice -n 19 /mnt/Vancouver/programming/scripts/arxiv-rss.sh
 
 # Version history:
@@ -16,6 +16,8 @@ export LANG=C.UTF-8
 #   * v11: changed grep expression (line ~230) to return URL for abstract (rather than PDF)
 #   * v12: switched identifying duplicate results files from diff method to date-tagged file approach
 #   * v13: updated (alternate) identify duplicate results files approach
+#   * v14: added mutt email notification (was using notify-send: v12 and preceding; commented out in v12
+#          in favor of /etc/crontab entry
 
 # Asides:
 #   1.  I program in Vim with textwidth=220: the formatting here reflects this wide-screen display.
@@ -40,8 +42,8 @@ export LANG=C.UTF-8
 #   /usr/bin/vim
 
 # SCRIPT DEPENDENCIES:
-#   /mnt/Vancouver/apps/arxiv/sed_characters                                     ## lookup file for character replacement via `sed -i` command on "arxiv-*" files
-#   /mnt/Vancouver/apps/arxiv/arxiv_keywords.txt                                 ## lookup file of key words, phrases for `grep` command on "arxiv-filtered" results file
+#   /mnt/Vancouver/apps/arxiv/sed_characters                                    ## lookup file for character replacement via `sed -i` command on "arxiv-*" files
+#   /mnt/Vancouver/apps/arxiv/arxiv_keywords.txt                                ## lookup file of key words, phrases for `grep` command on "arxiv-filtered" results file
 
 # USAGE:
 #   Runs 3 am daily via crontab:
@@ -378,11 +380,27 @@ fi
 # One-liner:
 # if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/apps/arxiv/\">/mnt/Vancouver/apps/arxiv/</a></span>"; fi
 
-if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then
+# /mnt/Vancouver/programming/scripts/mutt_test.sh
+
+# if [ -f arxiv-filtered ] || [ -f arxiv-others ]; then
+
+# One-liner:
+# if [ -f arxiv-others ]; then sed -i arxiv-* -f sed_characters; mutt -e "set content_type=text/text" -s 'arxiv-others' mail@VictoriasJourney.com -i /mnt/Vancouver/apps/arxiv/arxiv-others; fi
+
+if [ -f arxiv-filtered ]; then
   # Replace HTML, non-unicode characters in titles via external "sed_characters" lookup file:
   sed -i arxiv-* -f sed_characters
   # Desktop notification, with an arXiv png logo (available at https://persagen.com/files/misc/arxiv.png):
-  notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/apps/arxiv/\">/mnt/Vancouver/apps/arxiv/</a></span>"
+  # notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/apps/arxiv/\">/mnt/Vancouver/apps/arxiv/</a></span>"
+  mutt -e "set content_type=text/text" -s 'arxiv-filtered' mail@VictoriasJourney.com -i /mnt/Vancouver/apps/arxiv/arxiv-filtered
+fi
+
+if [ -f arxiv-others ]; then
+  # Replace HTML, non-unicode characters in titles via external "sed_characters" lookup file:
+  sed -i arxiv-* -f sed_characters
+  # Desktop notification, with an arXiv png logo (available at https://persagen.com/files/misc/arxiv.png):
+  # notify-send -i "/mnt/Vancouver/programming/scripts/arxiv.png" -t 0 "New arXiv RSS feeds at" "<span color='#57dafd' font='26px'><a href=\"file:///mnt/Vancouver/apps/arxiv/\">/mnt/Vancouver/apps/arxiv/</a></span>"
+  mutt -e "set content_type=text/text" -s 'arxiv-others' mail@VictoriasJourney.com -i /mnt/Vancouver/apps/arxiv/arxiv-others
 fi
 
 # ----------------------------------------
