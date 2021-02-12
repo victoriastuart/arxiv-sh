@@ -24,6 +24,7 @@
 
 ---
 
+<a name="addendum"></a>
 **Addendum** [2021-02-11]
 
 I've been running this `BASH` script daily for over a year.
