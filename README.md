@@ -19,3 +19,15 @@
 **Sample, filtered results (Neovim)**
 
 ![neovim_filtered-results](https://persagen.com/files/misc/arxiv-rss-in_Neovim.png)
+
+---
+
+**Addendum** [2021-02-11]
+
+I've been running this `BASH` script daily for over a year.
+
+Rather than opening the raw plain-text files, I found it easier each morning to retrieve those results via email, from which I review articles-of-interest in `Firefox` (those links opened directly from the two daily email messages).
+
+The plain-text messages include URLs to the arXiv article `abs` landing pages (or `pdf`, if you prefer), which are recognized as such by my email client.
+
+The `BASH` script - which I schedule via `crontab` - includes code near the bottom of the script for the emailing (via `mutt`) of those results, which I read in `Claws Mail`.
