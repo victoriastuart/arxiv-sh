@@ -10,7 +10,7 @@
 
 * If you have desktop notification (e.g. Linux `notify-send`), then a persistent message will indicate the arrival of new content
 
-  * [ *See **Addendum** for a an approach for easier notifications, reading.* ]
+  * [ *See the <a href="#addendum">Addendum</a> for a an approach for easier notifications, reading.* ]
 
     ![notification](https://persagen.com/files/misc/arXiv-RSS-notify-send2.png)
 
