@@ -1,4 +1,4 @@
-**arxiv.sh**:  daily query for new arXiv articles in select topics via RSS
+**arxiv.sh**:  daily query for new arXiv.org articles in select subjects via RSS
 
 I schedule the script to run daily (/etc/crontab) and mail the results to myself, which I read in Claws Mail (screenshot attached).
 
