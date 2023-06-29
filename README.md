@@ -8,4 +8,4 @@ I schedule the script to run daily and email the results to myself, which I read
 0    6    *    *    *    victoria    nice -n 19    /mnt/Vancouver/programming/scripts/arxiv.sh
 ```
 
-Due to the way arXiv.org presents the data, some older results are retained on each day but they are clearly deliniated in the script output and can be ignored (scroll past them) or used for reference to older results.
+Due to the way arXiv.org presents the data, some older results are retained on each day but they are clearly delineated in the script output and can be ignored (scroll past them) or used for reference to older results.
