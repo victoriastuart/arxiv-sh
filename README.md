@@ -1,4 +1,4 @@
-arxiv.sh daily query for new arXiv articles in select topics via RSS
+arxiv.sh :  daily query for new arXiv articles in select topics via RSS
 
 Update (2023-06-29): My old script was too buggy (brittle due to upstream changes that occassionally occur on the arXiv site), so I completely rewrote it.
 
